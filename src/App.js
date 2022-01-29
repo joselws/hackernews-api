@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Buttons from './components/Buttons';
 import Dropdown from './components/Dropdown';
 import Posts from './components/Posts';
+import Pages from './components/Pages';
 
 function App() {
   /***** State section *****/
@@ -13,41 +14,64 @@ function App() {
   // array to store the posts data
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);  // starts at page 1
-  const [nextPageAvailable, setNextPageAvailable] = useState(true)
+  const [pageButtons, setPageButtons] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, '>'])
 
   // handles choice between 'all' and 'my favs' buttons
-  const changeFavs = (bool_value) => {
-    setPosts([]);
-    setFavs(bool_value);
-    setPage(0);
+  const changeFavs = (boolValue) => {
+    if (favs !== boolValue) {
+      setPosts([]);
+      setFavs(boolValue);
+      setFramework(null);
+      setPage(0);
+    }
   }
 
   // handles selection of framework from dropdown list
   const changeFramework = (e) => {
-    let selected_framework = e.target.value;
-    if (framework !== selected_framework) {
+    let selectedFramework = e.target.value;
+    if (framework !== selectedFramework) {
       setPosts([]);
       setPage(0);
-      setFramework(selected_framework);
+      setFramework(selectedFramework);
     }
   }
 
-  // infinite scroll
-  window.addEventListener('scroll', () => {
-    // we scrolled down to the bottom of the page
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight && nextPageAvailable) {
-      setNextPageAvailable(false);
-      setPage(page + 1);
-      setInterval(() => {
-        // wait at least 2 seconds until you are able to load the next page
-      }, 2000);
+  // handles selection of page when a page button is clicked
+  const changePage = (pageNumber) => {
+    let selectedPage;
+    if (pageNumber === '<') {
+      selectedPage = page - 1;
+    } else if (pageNumber === '>') {
+      selectedPage = page + 1;
+    } else {
+      selectedPage = pageNumber;
     }
+    getPageButtons(selectedPage);
+    setPage(selectedPage);
+  }
 
-    // we are not at the bottom of the page
-    if (window.innerHeight + window.scrollY < document.body.offsetHeight) {
-      setNextPageAvailable(true);
+  // handles the display of page buttons
+  const getPageButtons = (selectedPage) => {
+    // dont show '<' if we are in the first page
+    if (selectedPage === 0) {
+      setPageButtons([0, 1, 2, 3, 4, 5, 6, 7, 8, '>']);
+      // show the default pages when the page is at least 5
+    } else if (selectedPage <= 4) {
+      setPageButtons(['<', 0, 1, 2, 3, 4, 5, 6, 7, 8, '>']);
+      // show 4 pages below and above the current page for pages greater than 5
+    } else {
+      const pages = [];
+      pages.push(selectedPage)
+      for(let i = 1; i <= 4; i++) {
+        pages.push(selectedPage + i);
+        pages.push(selectedPage - i);
+      }
+      pages.sort((a, b) => a - b);
+      pages.unshift('<');
+      pages.push('>');
+      setPageButtons(pages);
     }
-  })
+  }
 
 
   /***** Fetch section *****/
@@ -66,13 +90,10 @@ function App() {
 
   // add valid posts to the posts state
   const parsePosts = (dataPosts) => {
-    const validPosts = [];
-    dataPosts.map(post => {
-      if (post.author !== null || post.story_title !== null || post.story_url !== null || post.created_at !== null) {
-        validPosts.push(post);
-      }
+    const validPosts = dataPosts.filter(post => {
+      return (post.author !== null && post.story_title !== null && post.story_url !== null && post.created_at !== null)
     })
-    setPosts([...posts, ...validPosts]);
+    setPosts([...validPosts]);
   }
 
 
@@ -80,12 +101,13 @@ function App() {
     <div className="main-container">
       <Header />
       <Buttons favs={ favs } changeFavs={ changeFavs } />
-      <Dropdown framework={ framework } changeFramework={ changeFramework } />
+      { favs || <Dropdown framework={ framework } changeFramework={ changeFramework } /> }
       { favs ? <p>Displaying favorites</p> : <p>Displaying all</p> }
       { framework ? <p>{ framework }</p> : <p>No framework selected yet</p> }
       { posts.length > 0 ? <p>{ `Number of posts: ${posts.length}` }</p> : <p>No posts</p> }
       { page >= 0 ? <p>Page { page }</p> : <p></p>}
       <Posts posts={ posts } />
+      { !favs ? framework !== null ? <Pages pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> : <p></p> }
     </div>
   );
 }
