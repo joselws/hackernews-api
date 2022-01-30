@@ -109,7 +109,7 @@ function App() {
         { page >= 0 ? <p>Page { page }</p> : <p></p>}
         <Posts posts={ posts } />
       </div>
-      { !favs ? framework !== null ? <Pages pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> : <p></p> }
+      { !favs ? framework !== null ? <Pages page={ page } pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> : <p></p> }
     </div>
   );
 }

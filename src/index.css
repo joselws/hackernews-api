@@ -1,11 +1,27 @@
 /***** GENERAL STYLES *****/
 
+:root {
+  --mainColor: #FCFCFC;
+  --secondaryColor: #606060;
+  --mainTextColor: #343434;
+
+  --selectedBtn: #1890FF;
+  --favButtonBorder: #D6D6D6;
+
+  --postBorder: #ABABAB;
+  --heartWrapperColor: #F5F5F5;
+  
+  --pageButtonBorder: #E3E3E3;
+  
+  --hoverColor: #cccccc;
+}
+
 body {
   font-family: Roboto;
 }
 
 .main-container {
-  background-color: #fcfcfc;
+  background-color: var(--mainColor);
 }
 
 
@@ -45,19 +61,24 @@ body {
   width: 98px;
   height: 31px;
   border-radius: 2px;
-  background-color: #fcfcfc;
-  border: 1px solid #d6d6d6;
+  background-color: var(--mainColor);
+  border: 1px solid var(--favButtonBorder);
 }
 
 .fav-btn:hover {
-  background-color: #f1f1f1;
+  background-color: var(--hoverColor);
+}
+
+.fav-btn:focus {
+  outline: 0;
+  border: 1px solid var(--selectedBtn);
 }
 
 .btn-text {
   font-size: 16px;
   font-weight: bold;
   line-height: 1.75;
-  color: #606060; 
+  color: var(--secondaryColor); 
 }
 
 
@@ -80,12 +101,12 @@ body {
   padding: 0 12px;
   cursor: pointer;
   border-radius: 4px;
-  border: solid 1px #d6d6d6;
-  background-color: #fff;
+  border: solid 1px var(--secondaryColor);
+  background-color: var(--mainColor);
   font-size: 14px;
   font-family: Roboto;
   line-height: 1.57;
-  color: #343434;
+  color: var(--mainTextColor);
   text-align: left;
 }
 
@@ -93,7 +114,7 @@ body {
   display: none;
   position: absolute;
   z-index: 1;
-  background-color: #fff;
+  background-color: var(--mainColor);
   width: 240px;
   box-shadow: 0 2px 2px 0 #dad8d8;
 }
@@ -105,11 +126,11 @@ body {
   padding-left: 12px;
   font-size: 14px;
   line-height: 1.57;
-  color: #343434;
+  color: var(--mainTextColor);
 }
 
 .dropdown-option:hover {
-  background-color: #f1f1f1;
+  background-color: var(--hoverColor);
 }
 
 .dropdown-wrapper:hover .dropdown-content {
@@ -126,8 +147,8 @@ body {
 .post-wrapper {
   margin-top: 30px;
   border-radius: 6px;
-  border: solid 1px #979797;
-  background-color: #fff;
+  border: solid 1px var(--postBorder);
+  background-color: var(--mainColor);
   padding-left: 26px;
 }
 
@@ -141,9 +162,10 @@ body {
 .post-info {
   font-family: Roboto;
   font-size: 14px;
+  font-weight: bold;
   line-height: 1.43;
   letter-spacing: 0.25px;
-  color: #6b6b6b;
+  color: var(--secondaryColor);
 }
 
 
@@ -161,13 +183,17 @@ body {
   margin-right: 8px;
   margin-top: 8px;
   border-radius: 6px;
-  border: solid 1px #d9d9d9;
-  background-color: #fff;
+  border: solid 1px var(--pageButtonBorder);
+  background-color: var(--mainColor);
   font-family: Roboto;
   font-size: 14px;
   color: rgba(0, 0, 0, 0.65);
 }
 
 .page-btn:hover {
-  background-color: #f1f1f1;
+  background-color: var(--hoverColor);
+}
+
+.page-btn:focus {
+  outline: 0;
 }
