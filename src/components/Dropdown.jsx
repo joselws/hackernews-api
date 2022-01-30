@@ -1,12 +1,14 @@
 const Dropdown = ({ changeFramework }) => {
     return (
         <div className="dropdown-wrapper">
-            <select onChange={ changeFramework } >
-                <option selected disabled hidden>Select your news</option>
-                <option value="angular">Angular</option>
-                <option value="reactjs">Reactjs</option>
-                <option value="vuejs">Vuejs</option>
-            </select>
+            <button className="dropdown-btn">
+                Select your news
+            </button>
+            <div className="dropdown-content">
+                <p className="dropdown-option" onClick={() => { changeFramework('angular') }}>Angular</p>
+                <p className="dropdown-option" onClick={() => { changeFramework('reactjs') }}>Reactjs</p>
+                <p className="dropdown-option" onClick={() => { changeFramework('vuejs') }}>Vuejs</p>
+            </div>
         </div>
     )
 }

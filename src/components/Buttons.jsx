@@ -1,8 +1,12 @@
 const Buttons = ({ favs, changeFavs }) => {
     return (
         <div className="buttons-wrapper">
-            <button onClick={() => changeFavs(false)}>All</button>
-            <button onClick={() => changeFavs(true)}>My faves</button>
+            <button className="fav-btn" onClick={() => changeFavs(false)}>
+                <span className="btn-text">All</span>
+            </button>
+            <button className="fav-btn" onClick={() => changeFavs(true)}>
+                <span className="btn-text">My faves</span>
+            </button>
         </div>
     )
 }

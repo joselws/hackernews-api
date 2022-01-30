@@ -14,6 +14,7 @@ function App() {
   // array to store the posts data
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);  // starts at page 1
+  // data for buttons at the bottom of the page to select the desired page
   const [pageButtons, setPageButtons] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, '>'])
 
   // handles choice between 'all' and 'my favs' buttons
@@ -22,16 +23,15 @@ function App() {
       setPosts([]);
       setFavs(boolValue);
       setFramework(null);
-      setPage(0);
+      changePage(0);
     }
   }
 
   // handles selection of framework from dropdown list
-  const changeFramework = (e) => {
-    let selectedFramework = e.target.value;
+  const changeFramework = (selectedFramework) => {
     if (framework !== selectedFramework) {
       setPosts([]);
-      setPage(0);
+      changePage(0);
       setFramework(selectedFramework);
     }
   }
@@ -46,8 +46,8 @@ function App() {
     } else {
       selectedPage = pageNumber;
     }
-    getPageButtons(selectedPage);
     setPage(selectedPage);
+    getPageButtons(selectedPage);
   }
 
   // handles the display of page buttons
@@ -101,12 +101,14 @@ function App() {
     <div className="main-container">
       <Header />
       <Buttons favs={ favs } changeFavs={ changeFavs } />
-      { favs || <Dropdown framework={ framework } changeFramework={ changeFramework } /> }
-      { favs ? <p>Displaying favorites</p> : <p>Displaying all</p> }
-      { framework ? <p>{ framework }</p> : <p>No framework selected yet</p> }
-      { posts.length > 0 ? <p>{ `Number of posts: ${posts.length}` }</p> : <p>No posts</p> }
-      { page >= 0 ? <p>Page { page }</p> : <p></p>}
-      <Posts posts={ posts } />
+      <div className="body-container">
+        { favs || <Dropdown framework={ framework } changeFramework={ changeFramework } /> }
+        { favs ? <p>Displaying favorites</p> : <p>Displaying all</p> }
+        { framework ? <p>{ framework }</p> : <p>No framework selected yet</p> }
+        { posts.length > 0 ? <p>{ `Number of posts: ${posts.length}` }</p> : <p>No posts</p> }
+        { page >= 0 ? <p>Page { page }</p> : <p></p>}
+        <Posts posts={ posts } />
+      </div>
       { !favs ? framework !== null ? <Pages pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> : <p></p> }
     </div>
   );

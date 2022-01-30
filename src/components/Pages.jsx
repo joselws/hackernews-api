@@ -1,10 +1,10 @@
-import PageBtn from './PageBtn';
-
 const Pages = ({ pageButtons, changePage }) => {
     return (
         <div className="page-btn-wrapper">
             { pageButtons.map((pageNumber, index) =>
-                <PageBtn key={ index } changePage={ changePage } pageNumber={ pageNumber } />
+                <button key={ index } className="page-btn" onClick={() => changePage(pageNumber)}>
+                    { isNaN(pageNumber) ? pageNumber : pageNumber+1 }
+                </button>
             )}
         </div>
     )

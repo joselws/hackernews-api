@@ -1,3 +1,173 @@
+/***** GENERAL STYLES *****/
+
+body {
+  font-family: Roboto;
+}
+
+.main-container {
+  background-color: #fcfcfc;
+}
+
+
+/***** HEADER STYLES *****/
+
+.header-wrapper {
+  height: 114px;
+  box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
+  background-image: linear-gradient(to bottom, #ececec -32%, #fff 124%);
+  position: relative;
+}
+
+.title {
+  margin: 300px auto;
+  max-width: 78vw;
+  font-family: Baskerville;
+  font-size: 28px;
+  font-weight: normal;
+  line-height: 1;
+  color: #3b3b3b;
+  position: absolute;
+  margin: 0;
+  top: 50%;
+  left: 11vw;
+  transform: translateY(-50%);
+}
+
+
+/***** FAV BUTTONS STYLES *****/
+.buttons-wrapper {
+  margin: 63px auto;
+  max-width: 196px;
+}
+
+.fav-btn {
+  cursor: pointer;
+  width: 98px;
+  height: 31px;
+  border-radius: 2px;
+  background-color: #fcfcfc;
+  border: 1px solid #d6d6d6;
+}
+
+.fav-btn:hover {
+  background-color: #f1f1f1;
+}
+
+.btn-text {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.75;
+  color: #606060; 
+}
+
+
+.body-container {
+  margin: 0 auto;
+  max-width: 78vw;
+}
+
+
+/***** DROPDOWN LIST *****/
+
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-btn {
+  width: 240px;
+  height: 32px;
+  padding: 0 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: solid 1px #d6d6d6;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: Roboto;
+  line-height: 1.57;
+  color: #343434;
+  text-align: left;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background-color: #fff;
+  width: 240px;
+  box-shadow: 0 2px 2px 0 #dad8d8;
+}
+
+.dropdown-option {
+  margin: 0;
+  display: block;
+  cursor: pointer;
+  padding-left: 12px;
+  font-size: 14px;
+  line-height: 1.57;
+  color: #343434;
+}
+
+.dropdown-option:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-wrapper:hover .dropdown-content {
+  display: block;
+}
+
+
+/***** POSTS STYLE *****/
+
+.posts-wrapper {
+  margin: 8px 0;
+}
+
 .post-wrapper {
-  border: 1px solid black;
+  margin-top: 30px;
+  border-radius: 6px;
+  border: solid 1px #979797;
+  background-color: #fff;
+  padding-left: 26px;
+}
+
+.time-author {
+  font-family: Roboto;
+  font-size: 12px;
+  color: #767676;
+  margin-top: 27px;
+}
+
+.post-info {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0.25px;
+  color: #6b6b6b;
+}
+
+
+/***** PAGE BUTTONS *****/
+
+.page-btn-wrapper {
+  margin: 96px auto;
+  max-width: 440px;
+}
+
+.page-btn {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: solid 1px #d9d9d9;
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.page-btn:hover {
+  background-color: #f1f1f1;
 }
