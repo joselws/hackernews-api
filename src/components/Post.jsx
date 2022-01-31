@@ -4,12 +4,46 @@ import fullHeart from '../icons/full-heart.png';
 
 const Post = ({ favPosts, removeFavPost, addNewFavPost, post }) => {
 
+    // parse the post's datetime into an appropriate format
+    const parseDate = (datetime) => {
+        let today = new Date().getTime();
+        let postTime = new Date(datetime).getTime();
+        // convert to hours
+        let time = (today - postTime)/(1000*3600);
+        // less than 1 hours (display in minutes)
+        if (time < 1) {
+            time = Math.round(time*60);
+            if (time === 1) {
+                return `${time} minute ago`;
+            } else {
+                return `${time} minutes ago`;
+            }
+        // less than 24 hours (display in hours)
+        } else if (time <= 23) {
+            time = Math.round(time);
+            if (time === 1) {
+                return `${time} hour ago`;
+            } else {
+                return `${time} hours ago`;
+            }
+        // at least 24 hours (display in days)
+        } else {
+            time = Math.round(time/24);
+            if (time === 1) {
+                return `${time} day ago`;
+            } else {
+                return `${time} days ago`;
+            }        
+        }
+    }
+
+
     return (
         <div className="post-wrapper">
             <a className="text-section" href={ post.story_url } target="_blank">
                 <div className="time-author-wrapper">
                     <img className="clock-icon" src={clock} alt="clock icon" />
-                    <p className="time-author-info">{ post.created_at } by { post.author }</p>
+                    <p className="time-author-info">{ parseDate(post.created_at) } by { post.author }</p>
                 </div>
                 <div className="post-info-wrapper">
                     <p className="post-info">{ post.story_title }</p>
