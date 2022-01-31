@@ -7,7 +7,7 @@ const Buttons = ({ favs, changeFavs }) => {
             >
                 <span className="btn-text" style={ favs === false ? { color: '#1890FF' } : {} }>All</span>
             </button>
-            
+
             <button className="fav-btn" 
                 onClick={() => changeFavs(true)}
                 style={ favs === true ? { border: '1px solid #1890FF' } : {} } 
@@ -16,18 +16,6 @@ const Buttons = ({ favs, changeFavs }) => {
             </button>
         </div>
     )
-}
-
-// Turn blue when the button is clicked
-
-const selectedColor = {
-    text: '#1890FF',
-    border: '1px solid #1890FF'
-};
-
-const selectedButton = {                               
-    color: selectedColor.text,                         
-    border: selectedColor.border
 }
 
 export default Buttons;

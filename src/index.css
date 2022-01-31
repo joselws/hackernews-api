@@ -110,6 +110,11 @@ body {
   text-align: left;
 }
 
+.dropdown-icon {
+  margin-top: 5px;
+  float: right;
+}
+
 .dropdown-content {
   display: none;
   position: absolute;
@@ -120,6 +125,7 @@ body {
 }
 
 .dropdown-option {
+  height: 46px;
   margin: 0;
   display: block;
   cursor: pointer;
@@ -127,6 +133,24 @@ body {
   font-size: 14px;
   line-height: 1.57;
   color: var(--mainTextColor);
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+}
+
+.framework-img {
+  display: inline-flex;
+  align-self: center;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.option-text {
+  display: inline;
+  margin-left: 13px;
 }
 
 .dropdown-option:hover {
@@ -145,19 +169,54 @@ body {
 }
 
 .post-wrapper {
-  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 90px;
   border-radius: 6px;
   border: solid 1px var(--postBorder);
   background-color: var(--mainColor);
+  margin-top: 30px;
   padding-left: 26px;
+  text-decoration: none;
 }
 
-.time-author {
+.text-section {
+  flex: 9;
+}
+
+.heart-section {
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--heartWrapperColor);
+}
+
+.time-author-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.clock-icon {
+  height: 16px;
+  width: 16px;
+}
+
+.time-author-info {
+  display: inline;
   font-family: Roboto;
   font-size: 12px;
   color: #767676;
-  margin-top: 27px;
+  margin-left: 8px;
 }
+
+/* .post-info-wrapper {
+
+} */
 
 .post-info {
   font-family: Roboto;
@@ -168,10 +227,26 @@ body {
   color: var(--secondaryColor);
 }
 
+.heart-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heart-icon {
+  width: 22px;
+  height: 24px;
+  object-fit: contain;
+}
+
 
 /***** PAGE BUTTONS *****/
 
 .page-btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   margin: 96px auto;
   max-width: 440px;
 }
@@ -196,4 +271,16 @@ body {
 
 .page-btn:focus {
   outline: 0;
+}
+
+
+/* Makes the heart icon responsive and each post*/
+@media (max-width: 600px) {
+  .text-section {
+    flex: 7;
+  }
+
+  .heart-section {
+    flex: 3;
+  }
 }
