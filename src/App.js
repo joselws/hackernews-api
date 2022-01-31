@@ -8,7 +8,7 @@ import Pages from './components/Pages';
 
 function App() {
   /***** State section *****/
-
+  
   // store selected frontend framework from dropdown list
   const [framework, setFramework] = useState(null);
   // flag for displaying only favorites or all posts from buttons 
@@ -20,7 +20,6 @@ function App() {
   const [pageButtons, setPageButtons] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, '>'])
   // store favorite posts
   const [favPosts, setFavPosts] = useState([]);
-
 
   /***** App methods *****/
 
@@ -93,7 +92,9 @@ function App() {
 
   // Add new post to favorites when heart icon is clicked
   const addNewFavPost = (clickedPost) => {
-    let updatedFavPosts = [clickedPost, ...favPosts];
+    let newPost = clickedPost;
+    newPost.fav = true;
+    let updatedFavPosts = [newPost, ...favPosts];
     localStorage.setItem('favPosts', JSON.stringify(updatedFavPosts));
     setFavPosts(updatedFavPosts);
   }
@@ -104,38 +105,48 @@ function App() {
     setFavPosts(updatedFavPosts);
   }
 
-  /***** Local storage *****/
-  
-  // attempt to bring data from local storage on initial reload
-  const storedData = () => {
-    setFramework(localStorage.getItem('framework') ? localStorage.getItem('framework') : null);
-    setFavs(localStorage.getItem('favs') ? localStorage.getItem('favs') : false);
-    setPage(localStorage.getItem('page') ? localStorage.getItem('page') : 0);
-    setFavPosts(localStorage.getItem('favPosts') ? JSON.parse(localStorage.getItem('favPosts')) : []);
-  }
-
-
 
   /***** Fetch section *****/
 
   useEffect(() => {
-    if (!framework) {
+    if (localStorage.getItem('framework')) {
+      console.log('to stored data');
       storedData();
     }
+    console.log('to fetchposts');
     fetchPosts();
   }, [favs, page, framework])
 
+  // initializes states from local storage
+  const storedData = () => {
+    console.log('into stored data');
+    const localFramework = localStorage.getItem('framework') ? localStorage.getItem('framework') : null;
+    const localFavs = localStorage.getItem('favs') ? JSON.parse(localStorage.getItem('favs')) : false;
+    const localPosts = JSON.parse(localStorage.getItem('favs')) && localStorage.getItem('favPosts') ? JSON.parse(localStorage.getItem('favPosts')) : [];
+    const localPage = localStorage.getItem('page') ? JSON.parse(localStorage.getItem('page')) : 0;
+    const localFavPosts = localStorage.getItem('favPosts') ? JSON.parse(localStorage.getItem('favPosts')) : [];
+
+    setFramework(localFramework);
+    setFavs(localFavs);
+    setPosts(localPosts);
+    setPage(localPage);
+    setFavPosts(localFavPosts);
+  }
+
   // fetches data regarding the selected framework and all/favs choice
   const fetchPosts = async () => {
+    console.log('into fetch posts')
     if (framework !== null && !favs) {
       const res = await fetch(`https://hn.algolia.com/api/v1/search_by_date?query=${framework}&page=${page}`);
       const dataPosts = await res.json();
+      console.log(dataPosts);
       parsePosts(dataPosts.hits);
     }
   }
 
   // add valid posts to the posts state
   const parsePosts = (dataPosts) => {
+    console.log('parsing posts');
     let validPosts = [];
     for(let i = 0; i < dataPosts.length; i++) {
       if(dataPosts[i].author !== null && dataPosts[i].story_title !== null && dataPosts[i].story_url !== null && dataPosts[i].created_at !== null) {
@@ -144,7 +155,11 @@ function App() {
           story_title: dataPosts[i].story_title,
           story_url: dataPosts[i].story_url,
           created_at: dataPosts[i].created_at,
+          fav: true
         };
+        if (favPosts.include(newPost)) {
+          newPost.fav = false;
+        }
         validPosts.push(newPost);
       }
     }
@@ -164,9 +179,8 @@ function App() {
         { favs || <Dropdown framework={ framework } changeFramework={ changeFramework } /> }
         { favs ? <p>Displaying favorites</p> : <p>Displaying all</p> }
         { framework ? <p>{ framework }</p> : <p>No framework selected yet</p> }
-        { posts.length > 0 ? <p>{ `Number of posts: ${posts.length}` }</p> : <p>No posts</p> }
         { page >= 0 ? <p>Page { page }</p> : <p></p>}
-        <Posts favs={favs} favPosts={favPosts} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ posts } />
+        <Posts favs={favs} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ posts } />
       </div>
       { !favs && framework !== null ? <Pages page={ page } pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> }
     </div>
