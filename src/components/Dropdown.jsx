@@ -4,11 +4,12 @@ import reactjs from '../icons/reactjs.png';
 import vuejs from '../icons/vuejs.png';
 
 
-const Dropdown = ({ changeFramework }) => {
+const Dropdown = ({ framework, changeFramework }) => {
     return (
         <div className="dropdown-wrapper">
             <button className="dropdown-btn">
-                Select your news<img className="dropdown-icon" src={selectIcon} alt="Dropdown arrow icon" />
+                { framework ? `News on ${framework}` : 'Select your news'}
+                <img className="dropdown-icon" src={selectIcon} alt="Dropdown arrow icon" />
             </button>
 
             <div className="dropdown-content">
