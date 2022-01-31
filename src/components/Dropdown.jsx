@@ -4,7 +4,6 @@ import reactjs from '../icons/reactjs.png';
 import vuejs from '../icons/vuejs.png';
 
 
-
 const Dropdown = ({ changeFramework }) => {
     return (
         <div className="dropdown-wrapper">

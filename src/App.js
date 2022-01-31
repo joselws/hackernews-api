@@ -5,8 +5,10 @@ import Dropdown from './components/Dropdown';
 import Posts from './components/Posts';
 import Pages from './components/Pages';
 
+
 function App() {
   /***** State section *****/
+
   // store selected frontend framework from dropdown list
   const [framework, setFramework] = useState(null);
   // flag for displaying only favorites or all posts from buttons 
@@ -19,6 +21,9 @@ function App() {
   // store favorite posts
   const [favPosts, setFavPosts] = useState([]);
 
+
+  /***** App methods *****/
+
   // handles choice between 'all' and 'my favs' buttons
   const changeFavs = (boolValue) => {
     // we didn't click the same button
@@ -27,12 +32,13 @@ function App() {
       if (boolValue) {
         setPosts([...favPosts]);
         setFavs(boolValue);
+        localStorage.setItem('favs', boolValue);
       }
       // show all posts for framework and page filter
       else { 
         setPosts([]);
         setFavs(boolValue);
-        fetchPosts();
+        localStorage.setItem('favs', boolValue);
       }
     }
   }
@@ -43,6 +49,7 @@ function App() {
       setPosts([]);
       changePage(0);
       setFramework(selectedFramework);
+      localStorage.setItem('framework', selectedFramework);
     }
   }
 
@@ -57,6 +64,7 @@ function App() {
       selectedPage = pageNumber;
     }
     setPage(selectedPage);
+    localStorage.setItem('page', selectedPage);
     getPageButtons(selectedPage);
   }
 
@@ -85,22 +93,41 @@ function App() {
 
   // Add new post to favorites when heart icon is clicked
   const addNewFavPost = (clickedPost) => {
-    setFavPosts([clickedPost, ...favPosts]);
+    let updatedFavPosts = [clickedPost, ...favPosts];
+    localStorage.setItem('favPosts', JSON.stringify(updatedFavPosts));
+    setFavPosts(updatedFavPosts);
   }
 
   const removeFavPost = (clickedPost) => {
-    setFavPosts(favPosts.filter(post => post !== clickedPost))
+    let updatedFavPosts = favPosts.filter(post => post !== clickedPost);
+    localStorage.setItem('favPosts', JSON.stringify(updatedFavPosts));
+    setFavPosts(updatedFavPosts);
+  }
+
+  /***** Local storage *****/
+  
+  // attempt to bring data from local storage on initial reload
+  const storedData = () => {
+    setFramework(localStorage.getItem('framework') ? localStorage.getItem('framework') : null);
+    setFavs(localStorage.getItem('favs') ? localStorage.getItem('favs') : false);
+    setPage(localStorage.getItem('page') ? localStorage.getItem('page') : 0);
+    setFavPosts(localStorage.getItem('favPosts') ? JSON.parse(localStorage.getItem('favPosts')) : []);
   }
 
 
+
   /***** Fetch section *****/
+
   useEffect(() => {
+    if (!framework) {
+      storedData();
+    }
     fetchPosts();
-  }, [page, framework])
+  }, [favs, page, framework])
 
   // fetches data regarding the selected framework and all/favs choice
   const fetchPosts = async () => {
-    if (framework !== null) {
+    if (framework !== null && !favs) {
       const res = await fetch(`https://hn.algolia.com/api/v1/search_by_date?query=${framework}&page=${page}`);
       const dataPosts = await res.json();
       parsePosts(dataPosts.hits);
@@ -109,10 +136,23 @@ function App() {
 
   // add valid posts to the posts state
   const parsePosts = (dataPosts) => {
-    const validPosts = dataPosts.filter(post => {
-      return (post.author !== null && post.story_title !== null && post.story_url !== null && post.created_at !== null)
-    })
-    setPosts([...validPosts]);
+    let validPosts = [];
+    for(let i = 0; i < dataPosts.length; i++) {
+      if(dataPosts[i].author !== null && dataPosts[i].story_title !== null && dataPosts[i].story_url !== null && dataPosts[i].created_at !== null) {
+        let newPost = {
+          author: dataPosts[i].author,
+          story_title: dataPosts[i].story_title,
+          story_url: dataPosts[i].story_url,
+          created_at: dataPosts[i].created_at,
+        };
+        validPosts.push(newPost);
+      }
+    }
+    setPosts([...validPosts])
+    // const validPosts = dataPosts.filter(post => {
+    //   return (post.author !== null && post.story_title !== null && post.story_url !== null && post.created_at !== null)
+    // })
+    // setPosts([...validPosts]);
   }
 
 
@@ -126,9 +166,9 @@ function App() {
         { framework ? <p>{ framework }</p> : <p>No framework selected yet</p> }
         { posts.length > 0 ? <p>{ `Number of posts: ${posts.length}` }</p> : <p>No posts</p> }
         { page >= 0 ? <p>Page { page }</p> : <p></p>}
-        <Posts favPosts={favPosts} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ posts } />
+        <Posts favs={favs} favPosts={favPosts} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ posts } />
       </div>
-      { !favs ? framework !== null ? <Pages page={ page } pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> : <p></p> }
+      { !favs && framework !== null ? <Pages page={ page } pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> }
     </div>
   );
 }

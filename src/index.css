@@ -20,6 +20,10 @@ body {
   font-family: Roboto;
 }
 
+body * {
+  transition: 0.3s;
+}
+
 .main-container {
   background-color: var(--mainColor);
 }
@@ -51,6 +55,7 @@ body {
 
 
 /***** FAV BUTTONS STYLES *****/
+
 .buttons-wrapper {
   margin: 63px auto;
   max-width: 196px;
@@ -223,7 +228,7 @@ body {
 }
 
 /* .post-info-wrapper {
-
+  unused class
 } */
 
 .post-info {
