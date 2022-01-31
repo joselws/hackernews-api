@@ -98,15 +98,12 @@ function App() {
   }
 
   const removeFavPost = (clickedPost) => {
-    console.log('remove fav post triggered');
-    console.log(clickedPost);
     let updatedFavPosts = [];
     favPosts.map(post => {
       if(post.created_at !== clickedPost.created_at) {
         updatedFavPosts.push(post);
       }
     })
-    console.log(updatedFavPosts);
     localStorage.setItem('favPosts', JSON.stringify(updatedFavPosts));
     setFavPosts(updatedFavPosts);
   }
@@ -116,16 +113,13 @@ function App() {
 
   useEffect(() => {
     if (localStorage.getItem('framework')) {
-      console.log('to stored data');
       storedData();
     }
-    console.log('to fetchposts');
     fetchPosts();
   }, [favs, page, framework])
 
   // initializes states from local storage
   const storedData = () => {
-    console.log('into stored data');
     const localFramework = localStorage.getItem('framework') ? localStorage.getItem('framework') : null;
     const localFavs = localStorage.getItem('favs') ? JSON.parse(localStorage.getItem('favs')) : false;
     const localPosts = JSON.parse(localStorage.getItem('favs')) && localStorage.getItem('favPosts') ? JSON.parse(localStorage.getItem('favPosts')) : [];
@@ -141,7 +135,6 @@ function App() {
 
   // fetches data regarding the selected framework and all/favs choice
   const fetchPosts = async () => {
-    console.log('into fetch posts')
     if (framework !== null && !favs) {
       const res = await fetch(`https://hn.algolia.com/api/v1/search_by_date?query=${framework}&page=${page}`);
       const dataPosts = await res.json();
@@ -151,10 +144,8 @@ function App() {
 
   // add valid posts to the posts state
   const parsePosts = (dataPosts) => {
-    console.log('parsing posts');
     let validPosts = dataPosts.filter(post => post.author !== null && post.story_url !== null && post.story_title !== null && post.created_at !== null);
     
-    console.log(validPosts);
     setPosts([...validPosts]);
   }
 
