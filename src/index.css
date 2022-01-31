@@ -166,6 +166,9 @@ body {
 
 .posts-wrapper {
   margin: 8px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 40px;
 }
 
 .post-wrapper {
@@ -180,20 +183,21 @@ body {
   background-color: var(--mainColor);
   margin-top: 30px;
   padding-left: 26px;
-  text-decoration: none;
 }
 
 .text-section {
-  flex: 9;
+  flex: 8;
+  text-decoration: none;
 }
 
 .heart-section {
-  flex: 1;
+  flex: 2;
   align-self: stretch;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--heartWrapperColor);
+  cursor: pointer;
 }
 
 .time-author-wrapper {
@@ -225,12 +229,6 @@ body {
   line-height: 1.43;
   letter-spacing: 0.25px;
   color: var(--secondaryColor);
-}
-
-.heart-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .heart-icon {
@@ -274,13 +272,9 @@ body {
 }
 
 
-/* Makes the heart icon responsive and each post*/
-@media (max-width: 600px) {
-  .text-section {
-    flex: 7;
-  }
-
-  .heart-section {
-    flex: 3;
+/* Makes application responsive */
+@media (max-width: 650px) {
+  .posts-wrapper {
+    grid-template-columns: 1fr;
   }
 }

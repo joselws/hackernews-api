@@ -16,14 +16,24 @@ function App() {
   const [page, setPage] = useState(0);  // starts at page 1
   // data for buttons at the bottom of the page to select the desired page
   const [pageButtons, setPageButtons] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, '>'])
+  // store favorite posts
+  const [favPosts, setFavPosts] = useState([]);
 
   // handles choice between 'all' and 'my favs' buttons
   const changeFavs = (boolValue) => {
+    // we didn't click the same button
     if (favs !== boolValue) {
-      setPosts([]);
-      setFavs(boolValue);
-      setFramework(null);
-      changePage(0);
+      // show favorites when it's clicked
+      if (boolValue) {
+        setPosts([...favPosts]);
+        setFavs(boolValue);
+      }
+      // show all posts for framework and page filter
+      else { 
+        setPosts([]);
+        setFavs(boolValue);
+        fetchPosts();
+      }
     }
   }
 
@@ -73,6 +83,15 @@ function App() {
     }
   }
 
+  // Add new post to favorites when heart icon is clicked
+  const addNewFavPost = (clickedPost) => {
+    setFavPosts([clickedPost, ...favPosts]);
+  }
+
+  const removeFavPost = (clickedPost) => {
+    setFavPosts(favPosts.filter(post => post !== clickedPost))
+  }
+
 
   /***** Fetch section *****/
   useEffect(() => {
@@ -107,7 +126,7 @@ function App() {
         { framework ? <p>{ framework }</p> : <p>No framework selected yet</p> }
         { posts.length > 0 ? <p>{ `Number of posts: ${posts.length}` }</p> : <p>No posts</p> }
         { page >= 0 ? <p>Page { page }</p> : <p></p>}
-        <Posts posts={ posts } />
+        <Posts favPosts={favPosts} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ posts } />
       </div>
       { !favs ? framework !== null ? <Pages page={ page } pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> : <p></p> }
     </div>
