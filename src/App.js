@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import Header from './components/Header';
 import Buttons from './components/Buttons';
 import Dropdown from './components/Dropdown';
@@ -92,15 +92,21 @@ function App() {
 
   // Add new post to favorites when heart icon is clicked
   const addNewFavPost = (clickedPost) => {
-    let newPost = clickedPost;
-    newPost.fav = true;
-    let updatedFavPosts = [newPost, ...favPosts];
+    let updatedFavPosts = [clickedPost, ...favPosts];
     localStorage.setItem('favPosts', JSON.stringify(updatedFavPosts));
     setFavPosts(updatedFavPosts);
   }
 
   const removeFavPost = (clickedPost) => {
-    let updatedFavPosts = favPosts.filter(post => post !== clickedPost);
+    console.log('remove fav post triggered');
+    console.log(clickedPost);
+    let updatedFavPosts = [];
+    favPosts.map(post => {
+      if(post.created_at !== clickedPost.created_at) {
+        updatedFavPosts.push(post);
+      }
+    })
+    console.log(updatedFavPosts);
     localStorage.setItem('favPosts', JSON.stringify(updatedFavPosts));
     setFavPosts(updatedFavPosts);
   }
@@ -139,7 +145,6 @@ function App() {
     if (framework !== null && !favs) {
       const res = await fetch(`https://hn.algolia.com/api/v1/search_by_date?query=${framework}&page=${page}`);
       const dataPosts = await res.json();
-      console.log(dataPosts);
       parsePosts(dataPosts.hits);
     }
   }
@@ -147,27 +152,10 @@ function App() {
   // add valid posts to the posts state
   const parsePosts = (dataPosts) => {
     console.log('parsing posts');
-    let validPosts = [];
-    for(let i = 0; i < dataPosts.length; i++) {
-      if(dataPosts[i].author !== null && dataPosts[i].story_title !== null && dataPosts[i].story_url !== null && dataPosts[i].created_at !== null) {
-        let newPost = {
-          author: dataPosts[i].author,
-          story_title: dataPosts[i].story_title,
-          story_url: dataPosts[i].story_url,
-          created_at: dataPosts[i].created_at,
-          fav: true
-        };
-        if (favPosts.include(newPost)) {
-          newPost.fav = false;
-        }
-        validPosts.push(newPost);
-      }
-    }
-    setPosts([...validPosts])
-    // const validPosts = dataPosts.filter(post => {
-    //   return (post.author !== null && post.story_title !== null && post.story_url !== null && post.created_at !== null)
-    // })
-    // setPosts([...validPosts]);
+    let validPosts = dataPosts.filter(post => post.author !== null && post.story_url !== null && post.story_title !== null && post.created_at !== null);
+    
+    console.log(validPosts);
+    setPosts([...validPosts]);
   }
 
 
@@ -177,10 +165,7 @@ function App() {
       <Buttons favs={ favs } changeFavs={ changeFavs } />
       <div className="body-container">
         { favs || <Dropdown framework={ framework } changeFramework={ changeFramework } /> }
-        { favs ? <p>Displaying favorites</p> : <p>Displaying all</p> }
-        { framework ? <p>{ framework }</p> : <p>No framework selected yet</p> }
-        { page >= 0 ? <p>Page { page }</p> : <p></p>}
-        <Posts favs={favs} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ posts } />
+        <Posts favPosts={favPosts} favs={favs} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ posts } />
       </div>
       { !favs && framework !== null ? <Pages page={ page } pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> }
     </div>

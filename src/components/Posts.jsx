@@ -2,7 +2,7 @@ import clock from '../icons/clock.png';
 import hollowHeart from '../icons/hollow-heart.png';
 import fullHeart from '../icons/full-heart.png';
 
-const Posts = ({ favs, removeFavPost, addNewFavPost, posts }) => {
+const Posts = ({ favs, favPosts, removeFavPost, addNewFavPost, posts }) => {
 
     // parse the post's datetime into an appropriate format
     const parseDate = (datetime) => {
@@ -49,13 +49,13 @@ const Posts = ({ favs, removeFavPost, addNewFavPost, posts }) => {
             } else {
                 element.parentElement.parentElement.style.display = 'none';
             }
-        }
+        } 
     }
 
 
     return (
         <div className="posts-wrapper">
-            { posts.map((post, index) => { return (
+            { posts.map((post, index) => 
                 <div key={index} className="post-wrapper">
                     <a className="text-section" href={ post.story_url } target="_blank">
                         <div className="time-author-wrapper">
@@ -68,7 +68,7 @@ const Posts = ({ favs, removeFavPost, addNewFavPost, posts }) => {
                         </div>
                     </a>
     
-                    { post.fav ? 
+                    { favPosts.some(key => key.created_at === post.created_at) ? 
                         <div className="heart-section" onClick={(event) => {removeFavPost(post); removePost(event);}}>
                             <img className="heart-icon" src={fullHeart} alt="favorite post" />
                         </div>   
@@ -78,7 +78,7 @@ const Posts = ({ favs, removeFavPost, addNewFavPost, posts }) => {
                         </div>  
                     }
                 </div>            
-            )})}
+            )}
         </div>
     )
 }
