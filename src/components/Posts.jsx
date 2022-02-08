@@ -38,19 +38,19 @@ const Posts = ({ favs, favPosts, removeFavPost, addNewFavPost, posts }) => {
     }
 
     // remove post of render when you unfavorite it
-    const removePost = (e) => {
-        // only remove while on favorites filter
-        if (favs) {
-            let element = e.target;
-            // box around heart was clicked
-            if (element.tagName === 'DIV') {
-                element.parentElement.style.display = 'none';
-            // heart was clicked
-            } else {
-                element.parentElement.parentElement.style.display = 'none';
-            }
-        } 
-    }
+    // const removePost = (e) => {
+    //     // only remove while on favorites filter
+    //     if (favs) {
+    //         let element = e.target;
+    //         // box around heart was clicked
+    //         if (element.tagName === 'DIV') {
+    //             element.parentElement.style.display = 'none';
+    //         // heart was clicked
+    //         } else {
+    //             element.parentElement.parentElement.style.display = 'none';
+    //         }
+    //     } 
+    // }
 
 
     return (
@@ -69,7 +69,7 @@ const Posts = ({ favs, favPosts, removeFavPost, addNewFavPost, posts }) => {
                     </a>
     
                     { favPosts.some(key => key.created_at === post.created_at) ? 
-                        <div className="heart-section" onClick={(event) => {removeFavPost(post); removePost(event);}}>
+                        <div className="heart-section" onClick={() => {removeFavPost(post)}}>
                             <img className="heart-icon" src={fullHeart} alt="favorite post" />
                         </div>   
                     :

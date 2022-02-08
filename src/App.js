@@ -20,6 +20,8 @@ function App() {
   const [pageButtons, setPageButtons] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, '>'])
   // store favorite posts
   const [favPosts, setFavPosts] = useState([]);
+  // display dropdown on click
+  const [dropdownClicked, setDropdownClicked] = useState(false);
 
   /***** App methods *****/
 
@@ -27,18 +29,8 @@ function App() {
   const changeFavs = (boolValue) => {
     // we didn't click the same button
     if (favs !== boolValue) {
-      // show favorites when it's clicked
-      if (boolValue) {
-        setPosts([...favPosts]);
-        setFavs(boolValue);
-        localStorage.setItem('favs', boolValue);
-      }
-      // show all posts for framework and page filter
-      else { 
-        setPosts([]);
-        setFavs(boolValue);
-        localStorage.setItem('favs', boolValue);
-      }
+      setFavs(boolValue);
+      localStorage.setItem('favs', boolValue);
     }
   }
 
@@ -49,6 +41,15 @@ function App() {
       changePage(0);
       setFramework(selectedFramework);
       localStorage.setItem('framework', selectedFramework);
+    }
+  }
+
+  const changeDropdown = (boolValue) => {
+    // we clicked on it again although options are displayed
+    if (dropdownClicked === boolValue) {
+      setDropdownClicked(false);
+    } else {
+      setDropdownClicked(boolValue);
     }
   }
 
@@ -99,11 +100,11 @@ function App() {
 
   const removeFavPost = (clickedPost) => {
     let updatedFavPosts = [];
-    favPosts.map(post => {
+    favPosts.forEach(post => {
       if(post.created_at !== clickedPost.created_at) {
         updatedFavPosts.push(post);
       }
-    })
+    });
     localStorage.setItem('favPosts', JSON.stringify(updatedFavPosts));
     setFavPosts(updatedFavPosts);
   }
@@ -116,7 +117,7 @@ function App() {
       storedData();
     }
     fetchPosts();
-  }, [favs, page, framework])
+  }, [page, framework])
 
   // initializes states from local storage
   const storedData = () => {
@@ -155,8 +156,8 @@ function App() {
       <Header />
       <Buttons favs={ favs } changeFavs={ changeFavs } />
       <div className="body-container">
-        { favs || <Dropdown framework={ framework } changeFramework={ changeFramework } /> }
-        <Posts favPosts={favPosts} favs={favs} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ posts } />
+        { favs || <Dropdown dropdownClicked={dropdownClicked} changeDropdown={changeDropdown} framework={ framework } changeFramework={ changeFramework } /> }
+        <Posts favPosts={favPosts} favs={favs} removeFavPost={ removeFavPost } addNewFavPost={ addNewFavPost } posts={ favs ? favPosts : posts } />
       </div>
       { !favs && framework !== null ? <Pages page={ page } pageButtons={ pageButtons } changePage={ changePage } /> : <p></p> }
     </div>
